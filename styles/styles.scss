@@ -1,0 +1,58 @@
+
+$squareDimension: 200px;
+$start: 0;
+$end: 11;
+
+
+* {
+  box-sizing: border-box;
+  font-size: 0;
+}
+
+body {
+  overflow: hidden;
+}
+
+.squares-container {
+  width:  $squareDimension;
+  margin-top: -$squareDimension;
+  overflow: hidden;
+}
+
+.row {
+  height: $squareDimension;
+  overflow: visible;
+}
+
+.square {
+  position: absolute;
+  width: $squareDimension;
+  height: $squareDimension;
+}
+
+.row-even {
+  &.col-even {
+    background-color: #EAE0CC;
+
+  }
+  &.col-odd {
+    background-color: #C9ADA1;
+  }
+}
+
+.row-odd {
+  &.col-even {
+    background-color: #ADA7C9;
+
+  }
+
+  &.col-odd {
+    background-color: #FFF3BB;
+  }
+}
+
+@for $i from $start through $end {
+  .col-#{$i} {
+    left: calc(#{$squareDimension} * (#{$i} - 1));
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "pattern-fiddle",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass:watch": "sass --watch styles/styles.scss styles/styles.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "sass": "^1.23.7"
+  }
+}
