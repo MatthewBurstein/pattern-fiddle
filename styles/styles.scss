@@ -1,12 +1,11 @@
 
-$squareDimension: 200px;
-$start: 0;
-$end: 11;
+$squareDimension: 10vw;
+$minRowAndColumnNumber: 0;
+$maxRowAndColumnNumber: 13;
 
 
 * {
   box-sizing: border-box;
-  font-size: 0;
 }
 
 body {
@@ -51,8 +50,8 @@ body {
   }
 }
 
-@for $i from $start through $end {
+@for $i from $minRowAndColumnNumber through $maxRowAndColumnNumber {
   .col-#{$i} {
-    left: calc(#{$squareDimension} * (#{$i} - 1));
+    left: calc(#{$squareDimension} * (#{$i} - 2));
   }
 }
