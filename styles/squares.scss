@@ -1,0 +1,48 @@
+
+$squareDimension: 10vw;
+$minRowAndColumnNumber: 0;
+$maxRowAndColumnNumber: 13;
+
+.squares-container {
+  width:  $squareDimension;
+  margin-top: -$squareDimension;
+  overflow: hidden;
+}
+
+.row {
+  height: $squareDimension;
+  overflow: visible;
+}
+
+.square {
+  position: absolute;
+  width: $squareDimension;
+  height: $squareDimension;
+}
+
+.row-even {
+  &.col-even {
+    background-color: #EAE0CC;
+
+  }
+  &.col-odd {
+    background-color: #C9ADA1;
+  }
+}
+
+.row-odd {
+  &.col-even {
+    background-color: #ADA7C9;
+
+  }
+
+  &.col-odd {
+    background-color: #FFF3BB;
+  }
+}
+
+@for $i from $minRowAndColumnNumber through $maxRowAndColumnNumber {
+  .col-#{$i} {
+    left: calc(#{$squareDimension} * (#{$i} - 2));
+  }
+}

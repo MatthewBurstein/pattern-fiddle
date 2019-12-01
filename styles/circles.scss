@@ -1,0 +1,50 @@
+
+$largeCircleRadius: 50px;
+
+.circles {
+  padding-bottom: 20px;
+  // transform: rotate(30deg);
+  background-color: darkred;
+  position: absolute;
+  top: 0;
+  left: calc(50vw - #{$largeCircleRadius});
+  width: calc(2 * #{$largeCircleRadius});
+  height: 50vh;
+}
+
+
+@mixin circle($circleNumber) {
+  @debug triangular(1);
+  $circleRadius: calc(0.9 * #{$largeCircleRadius} / #{$circleNumber});
+  @debug $circleRadius;
+  // top: calc(50vh - (#{$circleRadius}));
+  // left: calc(50vw + #{$largeCircleRadius} * 1.9 * #{$circleNumber});
+  width: calc(#{$circleRadius} * 2);
+  height: calc(#{$circleRadius} * 2);
+  background-color: green;
+  opacity: 0.5;
+  position: absolute;
+  z-index: 20;
+  border-radius: $circleRadius;
+  mix-blend-mode: difference;
+}
+
+$firstCircleNumber: 1;
+$lastCircleNumber: 6;
+
+@for $i from $firstCircleNumber through $lastCircleNumber {
+  .circle-#{$i} {
+    @include circle($i)
+  }
+}
+
+@function triangular($value) {
+  $result: 0;
+  @if $value == 0 {
+    @return $result;
+  }
+  @for $index from 1 through $value {
+    $result: $result + $index;
+  }
+  @return $result;
+}
