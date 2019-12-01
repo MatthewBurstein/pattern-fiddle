@@ -15,6 +15,7 @@ $lastCircleNumber: 6;
   left: calc(50vw - #{$largeCircleRadius});
   width: calc(2 * #{$largeCircleRadius});
   height: 100vh;
+  mix-blend-mode: difference;
 }
 
 @for $i from $minCircleContainer through $maxCircleContainer {
@@ -31,7 +32,6 @@ $lastCircleNumber: 6;
   background-color: rgb(235, 164, 57);
   opacity: 0.4;
   border-radius: $circleRadius;
-  mix-blend-mode: difference;
 }
 
 @for $i from $firstCircleNumber through $lastCircleNumber {
