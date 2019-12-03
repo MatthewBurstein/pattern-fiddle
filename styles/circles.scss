@@ -15,7 +15,7 @@ $lastCircleNumber: 6;
   left: calc(50vw - #{$largeCircleRadius});
   width: calc(2 * #{$largeCircleRadius});
   height: 100vh;
-  mix-blend-mode: difference;
+  mix-blend-mode: exclusion;
 }
 
 @for $i from $minCircleContainer through $maxCircleContainer {

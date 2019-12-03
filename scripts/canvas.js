@@ -16,6 +16,7 @@ const numberOfRows = Math.ceil(canvas.height / dimension + 2) * overflow
 const colArr = Array(numberOfColumns).fill()
 const rowArr = Array(numberOfRows).fill()
 
+// make grid representation
 const squares = colArr.map((_, xIdx) => {
   return rowArr.map((_, yIdx) => {
     return Object.freeze({
@@ -25,7 +26,7 @@ const squares = colArr.map((_, xIdx) => {
     })
   })
 })
-console.log(squares)
+
 function draw(offset) {
   for (row of squares) {
     for (square of row) {
