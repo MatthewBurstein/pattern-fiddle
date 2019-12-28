@@ -12,11 +12,13 @@
       const naturalXPosition = offset + xIdx * dimension
       const realXPosition =
         naturalXPosition > width ? naturalXPosition - width : naturalXPosition
+      const isSplitColumn =
+        realXPosition < width - dimension || realXPosition > width
       return row.map((square, yIdx) => {
-        if (realXPosition < width - dimension || realXPosition > width) {
+        if (isSplitColumn) {
           paintWholeSquare(square, realXPosition, yIdx)
         } else {
-          paintSplitSquare(naturalXPosition, square, xIdx, yIdx)
+          paintSplitSquare(square, naturalXPosition, yIdx)
         }
         return square
       })
@@ -24,20 +26,25 @@
     return state
   }
 
-  function paintWholeSquare(square, xPosition, yIdx) {
+  function paintWholeSquare(square, realXPosition, yIdx) {
     const { colorIndex } = square
-    paintRectangle(xPosition, yIdx * dimension, dimension, colors[colorIndex])
+    paintRectangle(
+      realXPosition,
+      yIdx * dimension,
+      dimension,
+      square.state === TRANSITION_TO_DARK ? "black" : colors[colorIndex]
+    )
   }
 
-  function paintSplitSquare(naturalXPosition, square, xIdx, yIdx) {
+  function paintSplitSquare(square, naturalXPosition, yIdx) {
     const { colorIndex } = square
     const leftPartWidth = dimension - (width - naturalXPosition)
-    const color = colors[colorIndex]
+    const color =
+      square.state === TRANSITION_TO_DARK ? "black" : colors[colorIndex]
     // right side of screen
     paintRectangle(naturalXPosition, yIdx * dimension, dimension, color)
     // left side of screen
     paintRectangle(0, yIdx * dimension, leftPartWidth, color)
-    return square
   }
 
   function paintRectangle(xCoord, yCoord, width, color) {
@@ -72,16 +79,10 @@
     return "#8B008B"
   }
 
-  // window.addEventListener("mousemove", event => {
-  //   const { clientX, clientY } = event
-  //   const row = Math.floor(clientY / dimension)
-  //   const col = Math.floor(offset + clientX / dimension)
-  //   console.log("clientX ", clientX)
-  //   console.log("clientY ", clientY)
-  //   console.log("squares[row].length ", squares[row].length)
-  //   console.log("col ", col)
-  //   squares[row][col].state = TRANSITION_TO_DARK
-  // })
+  window.addEventListener("mousemove", event => {
+    const { clientX, clientY } = event
+    state.setSquareState(clientX, clientY, TRANSITION_TO_DARK)
+  })
 
   // MAKE OVERLAY
   //     square.xIdx = (xIdx + 1) % canvas.width

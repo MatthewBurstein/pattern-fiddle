@@ -7,6 +7,9 @@
     getState: function() {
       return this.state
     },
+    getOffset: function() {
+      return this.state.offset
+    },
     getSquares: function() {
       return this.state.squares
     },
@@ -17,6 +20,14 @@
     updateSquares: function(newSquares) {
       this.state.squares = newSquares
       return this
+    },
+    setSquareState(xCoord, yCoord, state) {
+      const [row, col] = getCurrentSquareFromCoords(
+        xCoord,
+        yCoord,
+        this.getOffset()
+      )
+      this.getSquares()[row][col].state = state
     }
   }
 
@@ -45,6 +56,15 @@
     } else {
       return yIdx % 2 === 0 ? 2 : 3
     }
+  }
+
+  function getCurrentSquareFromCoords(xCoord, yCoord, offset) {
+    const naturalXPosition = xCoord - offset
+    const realXPosition =
+      naturalXPosition >= 0 ? naturalXPosition : naturalXPosition + width
+    const row = Math.floor(realXPosition / dimension)
+    const col = Math.floor(yCoord / dimension)
+    return [row, col]
   }
 
   module.state = state
