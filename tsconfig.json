@@ -1,13 +1,11 @@
 {
     "compilerOptions": {
-        "outDir": "./built",
         "allowJs": true,
         "target": "es5",
-        "outFile": "./build/bundle.js",
+        "outDir": "./build",
         "noImplicitAny": true,
-        "strictNullChecks": true
+        "sourceMap": true,
+        "lib": ["ES2017", "DOM"]
     },
-    "include": [
-        "./src/**/*"
-    ]
+    "files": ["src/index.js"]
 }

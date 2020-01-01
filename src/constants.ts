@@ -1,25 +1,19 @@
-;(function(module) {
-  module.LIGHT = "light"
-  module.DARK = "dark"
-  module.TRANSITION_TO_DARK = "transitionToDark"
-  module.TRANSITION_TO_LIGHT = "transitionToLight"
-  module.TRANSITION_FROM_DARK = "transitionToDark"
-  module.TRANSITION_FROM_LIGHT = "transitionToLight"
-  module.squareStates = [
-    LIGHT,
-    TRANSITION_FROM_LIGHT,
-    TRANSITION_TO_DARK,
-    DARK,
-    TRANSITION_FROM_DARK,
-    TRANSITION_TO_LIGHT
-  ]
-  module.colors = ["#EAE0CC", "#C9ADA1", "#ADA7C9", "#FFF3BB"]
+import { SquareState, Color } from "./types"
 
-  module.canvas = document.getElementById("canvas")
-  module.width = window.innerWidth
-  module.height = window.innerHeight
-  canvas.height = height
-  canvas.width = width
-  module.numberOfColumns = 12
-  module.dimension = width / numberOfColumns
-})(this)
+export const squareStates = [
+  SquareState.LIGHT,
+  SquareState.TRANSITION_FROM_LIGHT,
+  SquareState.TRANSITION_TO_DARK,
+  SquareState.DARK,
+  SquareState.TRANSITION_FROM_DARK,
+  SquareState.TRANSITION_TO_LIGHT
+]
+export const colors: Color[] = ["#EAE0CC", "#C9ADA1", "#ADA7C9", "#FFF3BB"]
+
+export const canvas = <HTMLCanvasElement>document.getElementById("canvas")
+export const width = window.innerWidth
+export const height = window.innerHeight
+canvas.height = height
+canvas.width = width
+export const numberOfColumns = 12
+export const dimension = width / numberOfColumns

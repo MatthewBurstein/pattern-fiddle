@@ -6,12 +6,15 @@
   "scripts": {
     "sass:watch": "sass --watch styles/styles.scss:build/styles.css ./styles:./build",
     "sass": "sass styles/styles.scss:build/styles.css ./styles:./build",
-    "compile": "tsc --watch"
+    "build": "webpack --watch --mode=development"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "awesome-typescript-loader": "^5.2.1",
     "sass": "^1.23.7",
-    "typescript": "^3.7.4"
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   }
 }
