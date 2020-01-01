@@ -11,15 +11,12 @@
     squares.map((row, xIdx) => {
       const naturalXPosition = offset + xIdx * dimension
       const realXPosition =
-        naturalXPosition > width ? naturalXPosition - width : naturalXPosition
-      const isSplitColumn =
-        realXPosition < width - dimension || realXPosition > width
+        naturalXPosition - (naturalXPosition >= width ? width : 0)
+      const isSplitColumn = realXPosition < width - dimension
       return row.map((square, yIdx) => {
-        if (isSplitColumn) {
-          paintWholeSquare(square, realXPosition, yIdx)
-        } else {
-          paintSplitSquare(square, naturalXPosition, yIdx)
-        }
+        isSplitColumn
+          ? paintWholeSquare(square, realXPosition, yIdx)
+          : paintSplitSquare(square, naturalXPosition, yIdx)
         return square
       })
     })
@@ -27,36 +24,44 @@
   }
 
   function paintWholeSquare(square, realXPosition, yIdx) {
-    const { colorIndex } = square
-    paintRectangle(
-      realXPosition,
-      yIdx * dimension,
-      dimension,
-      square.state === TRANSITION_TO_DARK ? "black" : colors[colorIndex]
-    )
+    const { colorIndex, squareState, overlayWidth } = square
+    const yCoord = yIdx * dimension
+    paintRectangle(realXPosition, yCoord, dimension, colorIndex, squareState)
+
+    // draw overlay
+    if (isTransitionState(square)) {
+      ctx.globalAlpha = 0.4
+      ctx.fillStyle = getOverlayColor()
+      const xCoord = realXPosition + dimension / 2 - overlayWidth / 2
+      ctx.fillRect(xCoord, yCoord, overlayWidth, dimension)
+    }
   }
 
   function paintSplitSquare(square, naturalXPosition, yIdx) {
-    const { colorIndex } = square
+    const { colorIndex, squareState } = square
     const leftPartWidth = dimension - (width - naturalXPosition)
-    const color =
-      square.state === TRANSITION_TO_DARK ? "black" : colors[colorIndex]
     // right side of screen
-    paintRectangle(naturalXPosition, yIdx * dimension, dimension, color)
+    paintRectangle(
+      naturalXPosition,
+      yIdx * dimension,
+      dimension,
+      colorIndex,
+      squareState
+    )
     // left side of screen
-    paintRectangle(0, yIdx * dimension, leftPartWidth, color)
+    paintRectangle(0, yIdx * dimension, leftPartWidth, colorIndex, squareState)
   }
 
-  function paintRectangle(xCoord, yCoord, width, color) {
+  function paintRectangle(xCoord, yCoord, width, colorIndex, squareState) {
     ctx.globalAlpha = 1
-    ctx.fillStyle = color
+    ctx.fillStyle = colors[colorIndex]
     ctx.fillRect(xCoord, yCoord, width, dimension)
   }
 
   function moveSquares(state) {
     const { offset } = state.getState()
     const newOffset = (offset + 1) % width
-    return state.updateOffset(newOffset)
+    return state.updateOffset(newOffset).updateOverlayWidthsAndSquareStates()
   }
 
   function startSquareAnimation(timePerSquare, state) {
@@ -73,7 +78,7 @@
   }
 
   const interval = 1000
-  startSquareAnimation(interval, state)
+  startSquareAnimation(interval, globalState)
 
   function getOverlayColor(square) {
     return "#8B008B"
@@ -81,33 +86,6 @@
 
   window.addEventListener("mousemove", event => {
     const { clientX, clientY } = event
-    state.setSquareState(clientX, clientY, TRANSITION_TO_DARK)
+    globalState.handleMouseMove(clientX, clientY)
   })
-
-  // MAKE OVERLAY
-  //     square.xIdx = (xIdx + 1) % canvas.width
-
-  //     // draw overlay square
-  //     // switch (state) {
-  //     //   case LIGHT:
-  //     //     break
-  //     //   case DARK:
-  //     //     break
-  //     //   case TRANSITION_TO_LIGHT:
-  //     //     break
-  //     //   case TRANSITION_TO_DARK:
-  //     //     ctx.globalAlpha = 0.4
-  //     //     ctx.fillStyle = getOverlayColor(square)
-  //     //     const overlayWidth = dimension - offset
-  //     //     ctx.fillRect(
-  //     //       (xIdx < 0 ? 0 : xIdx) + offset / 2,
-  //     //       yIdx < 0 ? 0 : yIdx,
-  //     //       overlayWidth,
-  //     //       dimension
-  //     //     )
-  //     //     break
-  //     // }
-  //   }
-  //   isFirstColumn = false
-  // }
 })(this)

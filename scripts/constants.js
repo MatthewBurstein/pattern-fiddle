@@ -1,13 +1,25 @@
-const LIGHT = "light"
-const DARK = "dark"
-const TRANSITION_TO_DARK = "transitionToDark"
-const TRANSITION_TO_LIGHT = "transitionToLight"
-const colors = ["#EAE0CC", "#C9ADA1", "#ADA7C9", "#FFF3BB"]
+;(function(module) {
+  module.LIGHT = "light"
+  module.DARK = "dark"
+  module.TRANSITION_TO_DARK = "transitionToDark"
+  module.TRANSITION_TO_LIGHT = "transitionToLight"
+  module.TRANSITION_FROM_DARK = "transitionToDark"
+  module.TRANSITION_FROM_LIGHT = "transitionToLight"
+  module.squareStates = [
+    LIGHT,
+    TRANSITION_FROM_LIGHT,
+    TRANSITION_TO_DARK,
+    DARK,
+    TRANSITION_FROM_DARK,
+    TRANSITION_TO_LIGHT
+  ]
+  module.colors = ["#EAE0CC", "#C9ADA1", "#ADA7C9", "#FFF3BB"]
 
-const canvas = document.getElementById("canvas")
-const width = window.innerWidth
-const height = window.innerHeight
-canvas.height = height
-canvas.width = width
-const numberOfColumns = 12
-const dimension = width / numberOfColumns
+  module.canvas = document.getElementById("canvas")
+  module.width = window.innerWidth
+  module.height = window.innerHeight
+  canvas.height = height
+  canvas.width = width
+  module.numberOfColumns = 12
+  module.dimension = width / numberOfColumns
+})(this)

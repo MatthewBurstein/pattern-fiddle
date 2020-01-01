@@ -1,5 +1,5 @@
 ;(function(module) {
-  state = {
+  globalState = {
     state: {
       offset: 0,
       squares: getInitialSquares()
@@ -21,13 +21,40 @@
       this.state.squares = newSquares
       return this
     },
-    setSquareState(xCoord, yCoord, state) {
+    updateOverlayWidthsAndSquareStates() {
+      return this.updateSquares(
+        this.getSquares().map(row =>
+          row.map(square => {
+            if (isTransitionFromState(square)) {
+              decrementOverlayWidthOrMoveState(square)
+            } else if (isTransitionToState(square)) {
+              console.log("in here")
+              incrementOverlayWidthOrMoveState(square)
+            }
+            return square
+          })
+        )
+      )
+    },
+    setSquareState(xCoord, yCoord, squareState) {
       const [row, col] = getCurrentSquareFromCoords(
         xCoord,
         yCoord,
         this.getOffset()
       )
-      this.getSquares()[row][col].state = state
+      this.getSquares()[row][col].squareState = squareState
+    },
+    handleMouseMove: function(xCoord, yCoord) {
+      const [row, col] = getCurrentSquareFromCoords(
+        xCoord,
+        yCoord,
+        this.getOffset()
+      )
+      const square = this.getSquares()[row][col]
+      if (square.locked) {
+        return
+      }
+      moveSquareToNextState(square)
     }
   }
 
@@ -40,11 +67,10 @@
           .fill()
           .map((_, yIdx) => {
             return {
-              intrinsicX: xIdx,
-              intrinsicY: yIdx,
               colorIndex: getColorIndex(xIdx, yIdx),
-              // one of ['light', 'dark', 'transitionToDark', 'transitionToLight' ]
-              state: LIGHT
+              squareState: squareStates[0],
+              locked: false,
+              overlayWidth: dimension
             }
           })
       })
@@ -67,5 +93,23 @@
     return [row, col]
   }
 
-  module.state = state
+  function moveSquareToNextState(square) {
+    const oldStateIdx = squareStates.findIndex(s => s === square.squareState)
+    const newStateIdx = (oldStateIdx + 1) % squareStates.length
+    square.squareState = squareStates[newStateIdx]
+    square.locked = isTransitionState(square)
+  }
+
+  function incrementOverlayWidthOrMoveState(square) {
+    square.overlayWidth < dimension
+      ? square.overlayWidth++
+      : moveSquareToNextState(square)
+  }
+  function decrementOverlayWidthOrMoveState(square) {
+    square.overlayWidth > 0
+      ? square.overlayWidth--
+      : moveSquareToNextState(square)
+  }
+
+  module.globalState = globalState
 })(this)
