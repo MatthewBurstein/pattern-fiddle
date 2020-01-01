@@ -14,6 +14,9 @@
         naturalXPosition - (naturalXPosition >= width ? width : 0)
       const isSplitColumn = realXPosition < width - dimension
       return row.map((square, yIdx) => {
+        if (xIdx === 1 && yIdx === 1) {
+          if (square.squareState !== DARK) console.log(square)
+        }
         isSplitColumn
           ? paintWholeSquare(square, realXPosition, yIdx)
           : paintSplitSquare(square, naturalXPosition, yIdx)
@@ -60,6 +63,7 @@
 
   function moveSquares(state) {
     const { offset } = state.getState()
+    ;(5 * offset) % width === 0 && console.log(state)
     const newOffset = (offset + 1) % width
     return state.updateOffset(newOffset).updateOverlayWidthsAndSquareStates()
   }
