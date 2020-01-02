@@ -41,26 +41,52 @@ function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
 
   // draw overlay
   if (isTransitionState(square)) {
-    ctx.globalAlpha = 0.4
-    ctx.fillStyle = getOverlayColor()
     const xCoord = realXPosition + dimension / 2 - overlayWidth / 2
-    ctx.fillRect(xCoord, yCoord, overlayWidth, dimension)
+    paintOverlay(xCoord, yCoord, overlayWidth)
   }
 }
 
 function paintSplitSquare(square: Square, naturalXPosition: number, yIdx: number) {
-  const { colorIndex, squareState } = square
-  const leftPartWidth = dimension - (width - naturalXPosition)
+  const { colorIndex, squareState, overlayWidth } = square
+  const yCoord = yIdx * dimension
   // right side of screen
   paintRectangle(
     naturalXPosition,
-    yIdx * dimension,
+    yCoord,
     dimension,
     colorIndex,
     squareState
-  )
+    )
+
   // left side of screen
-  paintRectangle(0, yIdx * dimension, leftPartWidth, colorIndex, squareState)
+  const leftRectWidth = dimension - (width - naturalXPosition)
+  paintRectangle(0, yCoord, leftRectWidth, colorIndex, squareState)
+
+  // draw overlay
+  if (isTransitionState(square)) {
+    // right side of screen
+    const naturalLeftEdgeOfOverlay = dimension / 2 - overlayWidth / 2
+    const overlayRightXCoord = naturalXPosition + naturalLeftEdgeOfOverlay
+    paintOverlay(overlayRightXCoord, yCoord, overlayWidth)
+
+    // left side of screen
+    const rightRectWidth = dimension - leftRectWidth
+    const naturalRightEdgeOfOverlay = dimension / 2 - overlayWidth/ 2
+    const isEntireOverlayOnLeftRect = leftRectWidth > naturalRightEdgeOfOverlay
+    const overlayLeftXCoord = isEntireOverlayOnLeftRect
+      ? naturalLeftEdgeOfOverlay - rightRectWidth
+      : 0
+    const overlayLeftwidth = isEntireOverlayOnLeftRect
+      ? overlayWidth
+      : overlayWidth - rightRectWidth
+    paintOverlay(overlayLeftXCoord, yCoord, overlayLeftwidth)
+  }
+}
+
+function paintOverlay (xCoord: number, yCoord: number, width: number) {
+  ctx.globalAlpha = 0.4
+  ctx.fillStyle = getOverlayColor()
+  ctx.fillRect(xCoord, yCoord, width, dimension)
 }
 
 function paintRectangle(xCoord: number, yCoord: number, width: number, colorIndex: number, squareState: SquareState) {
