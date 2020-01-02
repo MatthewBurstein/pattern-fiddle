@@ -1,4 +1,4 @@
-import { State, SquareState, Square, OverlayColor } from './types'
+import { State, Square, OverlayColor } from './types'
 import { canvas } from './constants'
 import { pipe } from './pipe'
 import {
@@ -35,9 +35,9 @@ function paint(state: State): State {
 }
 
 function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
-  const { colorIndex, squareState, overlayWidth } = square
+  const { colorIndex, overlayWidth } = square
   const yCoord = yIdx * dimension
-  paintRectangle(realXPosition, yCoord, dimension, colorIndex, squareState)
+  paintRectangle(realXPosition, yCoord, dimension, colorIndex)
 
   // draw overlay
   if (isTransitionState(square)) {
@@ -47,20 +47,19 @@ function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
 }
 
 function paintSplitSquare(square: Square, naturalXPosition: number, yIdx: number) {
-  const { colorIndex, squareState, overlayWidth } = square
+  const { colorIndex, overlayWidth } = square
   const yCoord = yIdx * dimension
   // right side of screen
   paintRectangle(
     naturalXPosition,
     yCoord,
     dimension,
-    colorIndex,
-    squareState
+    colorIndex
     )
 
   // left side of screen
-  const leftRectWidth = dimension - (width - naturalXPosition)
-  paintRectangle(0, yCoord, leftRectWidth, colorIndex, squareState)
+  const leftRectWidth = (dimension - (width - naturalXPosition)) % width
+  paintRectangle(0, yCoord, leftRectWidth, colorIndex)
 
   // draw overlay
   if (isTransitionState(square)) {
