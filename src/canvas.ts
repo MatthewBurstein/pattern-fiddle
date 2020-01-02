@@ -89,7 +89,7 @@ function paintOverlay (xCoord: number, yCoord: number, width: number) {
   ctx.fillRect(xCoord, yCoord, width, dimension)
 }
 
-function paintRectangle(xCoord: number, yCoord: number, width: number, colorIndex: number, squareState: SquareState) {
+function paintRectangle(xCoord: number, yCoord: number, width: number, colorIndex: number) {
   ctx.globalAlpha = 1
   ctx.fillStyle = colors[colorIndex]
   ctx.fillRect(xCoord, yCoord, width, dimension)

@@ -1,4 +1,4 @@
-import {State, Square, SquareState} from './types'
+import {State, Square} from './types'
 import {
   isTransitionFromState,
   isTransitionToState,
@@ -40,16 +40,6 @@ export function updateOverlayWidthsAndSquareStates(): State {
       })
     )
   )
-}
-
-function setSquareState(xCoord: number, yCoord: number, squareState: SquareState): State {
-  const [row, col] = getCurrentSquareFromCoords(
-    xCoord,
-    yCoord,
-    globalState.offset
-  )
-  globalState.squares[row][col].squareState = squareState
-  return globalState
 }
 
 export function handleMouseMove (xCoord: number, yCoord: number): State {

@@ -5,7 +5,9 @@
         "outDir": "./build",
         "noImplicitAny": true,
         "sourceMap": true,
-        "lib": ["ES2017", "DOM"]
+        "lib": ["ES2017", "DOM"],
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
     },
     "files": ["src/index.js"]
 }
