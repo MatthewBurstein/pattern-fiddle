@@ -6,12 +6,14 @@
   "scripts": {
     "sass:watch": "sass --watch styles/styles.scss:build/styles.css ./styles:./build",
     "sass": "sass styles/styles.scss:build/styles.css ./styles:./build",
-    "build": "webpack --watch --mode=development"
+    "build": "webpack --watch --mode=development",
+    "prettier": "prettier --parser typescript --single-quote --write \"src/**/*.{ts,tsx}\""
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
+    "prettier": "^1.19.1",
     "sass": "^1.23.7",
     "typescript": "^3.7.4",
     "webpack": "^4.41.5",

@@ -1,8 +1,11 @@
-import { State } from "./types";
+import { State } from './types';
 
-export function pipe(initialValue: State, functionArray: ((...args: any[]) => State)[]): State {
-    return functionArray.reduce(
-      (previousReturnValue, fn) => fn(previousReturnValue),
-      initialValue
-    )
-  }
+export function pipe(
+  initialValue: State,
+  functionArray: ((...args: any[]) => State)[]
+): State {
+  return functionArray.reduce(
+    (previousReturnValue, fn) => fn(previousReturnValue),
+    initialValue
+  );
+}

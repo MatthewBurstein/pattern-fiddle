@@ -1,2 +1,2 @@
-import './canvas'
-import './circles'
+import './canvas';
+import './circles';
