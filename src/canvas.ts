@@ -23,11 +23,11 @@ function paint(state: State): State {
     const naturalXPosition = offset + xIdx * dimension
     const realXPosition =
       naturalXPosition - (naturalXPosition >= width ? width : 0)
-    const isSplitColumn = realXPosition < width - dimension
+    const isSplitColumn = realXPosition > width - dimension
     return row.map((square, yIdx) => {
       isSplitColumn
-        ? paintWholeSquare(square, realXPosition, yIdx)
-        : paintSplitSquare(square, naturalXPosition, yIdx)
+        ? paintSplitSquare(square, naturalXPosition, yIdx)
+        : paintWholeSquare(square, realXPosition, yIdx)
       return square
     })
   })

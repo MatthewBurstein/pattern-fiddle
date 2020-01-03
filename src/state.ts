@@ -5,7 +5,7 @@ import {
   isTransitionState
 } from './square'
 import {
-  canvas, dimension, squareStates, width
+  dimension, squareStates, width, numberOfRows, numberOfColumns
 } from './constants'
 
 const globalState: State = {
@@ -57,8 +57,7 @@ export function handleMouseMove (xCoord: number, yCoord: number): State {
 }
 
 function getInitialSquares(): Square[][] {
-  const numberOfRows = Math.ceil(canvas.height / dimension + 2)
-  return Array(numberOfRows)
+  return Array(numberOfColumns)
     .fill(undefined)
     .map((_, xIdx) => {
       return Array(numberOfRows)

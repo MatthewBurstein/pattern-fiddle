@@ -1,5 +1,4 @@
 import { SquareState, Color } from "./types"
-import { windowDimensions, squareDimension} from './dimensionCalculator'
 
 export const squareStates: SquareState[] = [
   SquareState.LIGHT,
@@ -12,10 +11,13 @@ export const squareStates: SquareState[] = [
 
 export const colors: Color[] = ["#EAE0CC", "#C9ADA1", "#ADA7C9", "#FFF3BB"]
 
-export const width = windowDimensions.width
-export const height = windowDimensions.height
-export const dimension = squareDimension
+export const width = window.innerWidth
+export const height = window.innerHeight
+export const numberOfColumns = 12
+
+export const dimension = width / numberOfColumns
 
 export const canvas = <HTMLCanvasElement>document.getElementById("canvas")
 canvas.width = width
 canvas.height = height
+export const numberOfRows = Math.ceil(height / dimension)
