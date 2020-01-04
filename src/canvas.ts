@@ -1,7 +1,8 @@
 import { State, Square, OverlayColor, SquareState } from './types';
 import { canvas } from './constants';
 import { pipe } from './pipe';
-import { width, height, dimension, colors } from './constants';
+import { width, height, dimension } from './constants';
+import { getPrimaryPalette } from './colors';
 import { isTransitionState } from './square';
 import {
   updateOffset,
@@ -35,9 +36,9 @@ function paint(state: State): State {
 }
 
 function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
-  const { colorIndex, overlayWidth } = square;
+  const { colorIndex, overlayWidth, squareState } = square;
   const yCoord = yIdx * dimension;
-  paintRectangle(realXPosition, yCoord, dimension, colorIndex);
+  paintRectangle(realXPosition, yCoord, dimension, colorIndex, squareState);
 
   // draw overlay
   if (isTransitionState(square)) {
@@ -57,14 +58,14 @@ function paintSplitSquare(
   naturalXPosition: number,
   yIdx: number
 ) {
-  const { colorIndex, overlayWidth } = square;
+  const { colorIndex, overlayWidth, squareState } = square;
   const yCoord = yIdx * dimension;
   // right side of screen
-  paintRectangle(naturalXPosition, yCoord, dimension, colorIndex);
+  paintRectangle(naturalXPosition, yCoord, dimension, colorIndex, squareState);
 
   // left side of screen
   const leftRectWidth = (dimension - (width - naturalXPosition)) % width;
-  paintRectangle(0, yCoord, leftRectWidth, colorIndex);
+  paintRectangle(0, yCoord, leftRectWidth, colorIndex, squareState);
 
   // draw overlay
   if (isTransitionState(square)) {
@@ -109,7 +110,7 @@ function paintOverlay(
   squareState: SquareState
 ) {
   ctx.globalAlpha = 0.4;
-  ctx.fillStyle = getOverlayColor();
+  ctx.fillStyle = getOverlayColor(colorIndex, squareState);
   ctx.fillRect(xCoord, yCoord, width, dimension);
 }
 
@@ -117,10 +118,11 @@ function paintRectangle(
   xCoord: number,
   yCoord: number,
   width: number,
-  colorIndex: number
+  colorIndex: number,
+  squareState: SquareState
 ) {
   ctx.globalAlpha = 1;
-  ctx.fillStyle = colors[colorIndex];
+  ctx.fillStyle = getPrimaryPalette(squareState)[colorIndex];
   ctx.fillRect(xCoord, yCoord, width, dimension);
 }
 
@@ -149,7 +151,10 @@ function startSquareAnimation(timePerSquare: number, state: State): void {
 const interval = 1000;
 startSquareAnimation(interval, getGlobalState());
 
-function getOverlayColor(): OverlayColor {
+function getOverlayColor(
+  colorIndex: number,
+  squareState: SquareState
+): OverlayColor {
   return '#8B008B';
 }
 

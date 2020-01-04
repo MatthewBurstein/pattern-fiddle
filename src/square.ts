@@ -22,3 +22,11 @@ export function isTransitionToState(square: Square): boolean {
     SquareState.TRANSITION_TO_DARK
   ].includes(square.squareState);
 }
+
+export function hasLightPrimaryPalette(squareState: SquareState) {
+  return [
+    SquareState.LIGHT,
+    SquareState.TRANSITION_FROM_LIGHT,
+    SquareState.TRANSITION_TO_DARK
+  ].includes(squareState);
+}

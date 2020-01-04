@@ -3,7 +3,8 @@ export interface State {
   squares: Square[][];
 }
 
-export type Color = '#EAE0CC' | '#C9ADA1' | '#ADA7C9' | '#FFF3BB';
+export type LightColor = '#EAE0CC' | '#C9ADA1' | '#ADA7C9' | '#FFF3BB';
+export type DarkColor = '#84775E' | '#7C3A2A' | '#492A91' | '#D8C158';
 export type OverlayColor = '#8B008B';
 
 export interface Square {

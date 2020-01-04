@@ -1,4 +1,4 @@
-import { SquareState, Color } from './types';
+import { SquareState } from './types';
 
 export const squareStates: SquareState[] = [
   SquareState.LIGHT,
@@ -8,8 +8,6 @@ export const squareStates: SquareState[] = [
   SquareState.TRANSITION_FROM_DARK,
   SquareState.TRANSITION_TO_LIGHT
 ];
-
-export const colors: Color[] = ['#EAE0CC', '#C9ADA1', '#ADA7C9', '#FFF3BB'];
 
 export const width = window.innerWidth;
 export const height = window.innerHeight;
