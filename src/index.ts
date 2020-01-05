@@ -1,2 +1,1 @@
 import './canvas';
-import './circles';
