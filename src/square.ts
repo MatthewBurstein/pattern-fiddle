@@ -27,6 +27,6 @@ export function hasLightPrimaryPalette(squareState: SquareState) {
   return [
     SquareState.LIGHT,
     SquareState.TRANSITION_FROM_LIGHT,
-    SquareState.TRANSITION_TO_DARK
+    SquareState.TRANSITION_TO_LIGHT
   ].includes(squareState);
 }
