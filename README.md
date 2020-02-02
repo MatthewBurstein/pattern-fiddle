@@ -6,6 +6,6 @@ making pretty patterns
 
 Build sass
 ```
-$ npm run sass:watch
+$ npm run build
 $ open index.html
 ```
