@@ -1,8 +1,7 @@
 import { State, Square, SquareState } from './types';
 import { canvas } from './constants';
-import { width, height, dimension, interval } from './constants';
+import { width, height, dimension } from './constants';
 import { getOverlayPalette, OverlayColor, getBaseColor } from './colors';
-import { getGlobalState, moveSquares } from './state';
 
 const ctx = canvas.getContext('2d');
 
@@ -102,19 +101,6 @@ function paintBaseSquare(
   ctx.globalAlpha = 1;
   ctx.fillStyle = getBaseColor(colorIndex);
   ctx.fillRect(xCoord, yCoord, width, dimension);
-}
-
-export function startSquareAnimation(): void {
-  const state = getGlobalState();
-  function recursivelyAnimateSquares(): void {
-    setTimeout(() => {
-      paint(state);
-      moveSquares(state);
-      recursivelyAnimateSquares();
-    }, interval);
-  }
-
-  recursivelyAnimateSquares();
 }
 
 function getOverlayColor(

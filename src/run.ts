@@ -1,7 +1,18 @@
 import { handleMouseMove } from './state';
-import { startSquareAnimation } from './canvas';
+import { paint } from './canvas';
+import { getGlobalState, moveSquares } from './state';
+import { width } from './constants';
 
-startSquareAnimation();
+const interval =
+  width < 600 ? 20
+  : width < 1000 ? 15
+  : 10;
+
+setInterval(() => {
+  const state = getGlobalState();
+  paint(state);
+  moveSquares(state);
+}, interval);
 
 window.addEventListener('mousemove', event => {
   const { clientX, clientY } = event;

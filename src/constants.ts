@@ -19,5 +19,3 @@ export const canvas = <HTMLCanvasElement>document.getElementById('canvas');
 canvas.width = width;
 canvas.height = height;
 export const numberOfRows = Math.ceil(height / dimension);
-
-export const interval = 5.5;
