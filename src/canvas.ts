@@ -1,22 +1,13 @@
 import { State, Square, SquareState } from './types';
 import { canvas } from './constants';
 import { pipe } from './pipe';
-import { width, height, dimension } from './constants';
+import { width, height, dimension, interval } from './constants';
 import { getOverlayPalette, OverlayColor, getBaseColor } from './colors';
-import {
-  updateOffset,
-  updateOverlayWidthsAndSquareStates,
-  getGlobalState,
-  handleMouseMove
-} from './state';
+import { updateOffset, updateOverlayWidthsAndSquareStates } from './state';
 
 const ctx = canvas.getContext('2d');
 
-function process(state: State): State {
-  return pipe(state, [paint, moveSquares]);
-}
-
-function paint(state: State): State {
+export function paint(state: State): State {
   ctx.clearRect(0, 0, width, height);
   const { squares, offset } = state;
   squares.map((row, xIdx) => {
@@ -39,7 +30,7 @@ function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
   const yCoord = yIdx * dimension;
   const xCoord = realXPosition + dimension / 2 - overlayWidth / 2;
 
-  paintRectangle(realXPosition, yCoord, dimension, colorIndex);
+  paintBaseSquare(realXPosition, yCoord, dimension, colorIndex);
   paintOverlay(
     xCoord,
     yCoord,
@@ -49,28 +40,24 @@ function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
   );
 }
 
-function paintSplitSquare(
-  square: Square,
-  naturalXPosition: number,
-  yIdx: number
-) {
-  const { colorIndex, overlayWidth } = square;
+function paintSplitSquare(square: Square, naturalXPosition: number, yIdx: number) {
+  const { colorIndex, overlayWidth, squareState } = square;
   const yCoord = yIdx * dimension;
   const naturalLeftEdgeOfOverlay = dimension / 2 - overlayWidth / 2;
   const overlayRightXCoord = naturalXPosition + naturalLeftEdgeOfOverlay;
   // right side of screen
-  paintRectangle(naturalXPosition, yCoord, dimension, colorIndex);
+  paintBaseSquare(naturalXPosition, yCoord, dimension, colorIndex);
   paintOverlay(
     overlayRightXCoord,
     yCoord,
     overlayWidth,
-    square.colorIndex,
-    square.squareState
+    colorIndex,
+    squareState
   );
 
   // left side of screen
   const leftRectWidth = (dimension - (width - naturalXPosition)) % width;
-  paintRectangle(0, yCoord, leftRectWidth, colorIndex);
+  paintBaseSquare(0, yCoord, leftRectWidth, colorIndex);
   const rightRectWidth = dimension - leftRectWidth;
   const distanceBetweenRectEdgeandRightEdgeOfOverlay =
     dimension / 2 - overlayWidth / 2;
@@ -86,8 +73,8 @@ function paintSplitSquare(
     overlayLeftXCoord,
     yCoord,
     overlayLeftwidth,
-    square.colorIndex,
-    square.squareState
+    colorIndex,
+    squareState
   );
 }
 
@@ -103,7 +90,7 @@ function paintOverlay(
   ctx.fillRect(xCoord, yCoord, width, dimension);
 }
 
-function paintRectangle(
+function paintBaseSquare(
   xCoord: number,
   yCoord: number,
   width: number,
@@ -116,28 +103,26 @@ function paintRectangle(
 
 function moveSquares(state: State): State {
   const { offset } = state;
-  const newOffset = (offset + 1) % width;
   return pipe(state, [
-    () => updateOffset(newOffset),
+    () => updateOffset((offset + 1) % width),
     updateOverlayWidthsAndSquareStates
   ]);
 }
 
-function startSquareAnimation(timePerSquare: number, state: State): void {
-  const baseStepTime = timePerSquare / dimension;
+let count = 0
 
-  function recursivelyAnimateSquares(time: number, state: State): void {
+export function startSquareAnimation(state: State): void {
+
+  function recursivelyAnimateSquares(state: State): void {
+    count++
     setTimeout(() => {
-      const nextState = process(state);
-      recursivelyAnimateSquares(time, nextState);
-    }, time);
+      const nextState = pipe(state, [paint, moveSquares])
+      recursivelyAnimateSquares(nextState);
+    }, interval);
   }
 
-  recursivelyAnimateSquares(baseStepTime, state);
+  recursivelyAnimateSquares(state);
 }
-
-const interval = 800;
-startSquareAnimation(interval, getGlobalState());
 
 function getOverlayColor(
   colorIndex: number,
@@ -145,17 +130,3 @@ function getOverlayColor(
 ): OverlayColor {
   return getOverlayPalette(squareState, colorIndex);
 }
-
-window.addEventListener('mousemove', event => {
-  const { clientX, clientY } = event;
-  handleMouseMove(clientX, clientY);
-});
-
-window.addEventListener('touchstart', event => {
-  const { pageX, pageY } = event.touches[0]
-  handleMouseMove(pageX, pageY);
-});
-window.addEventListener('touchmove', event => {
-  const { pageX, pageY } = event.touches[0]
-  handleMouseMove(pageX, pageY);
-});

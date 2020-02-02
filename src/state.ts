@@ -32,36 +32,36 @@ export function updateSquares(newSquares: Square[][]) {
 }
 
 export function updateOverlayWidthsAndSquareStates(): State {
-  return updateSquares(
-    globalState.squares.map((row: Square[]) =>
-      row.map(square => {
+    const newSquares = globalState.squares.map((row: Square[]): Square[] =>
+      row.map((square: Square): Square => {
         if (isTransitionFromState(square)) {
-          decrementOverlayWidthOrMoveState(square);
+          const newValue = decrementOverlayWidthOrMoveState(square);
+          return newValue
         } else if (isTransitionToState(square)) {
-          incrementOverlayWidthOrMoveState(square);
+          const newValue = incrementOverlayWidthOrMoveState(square);
+          return newValue
+        } else {
+          return square
         }
-        return square;
       })
     )
-  );
+    return updateSquares(newSquares)
 }
 
-export function handleMouseMove(xCoord: number, yCoord: number): State {
+export function handleMouseMove(xCoord: number, yCoord: number): void {
   const [row, col] = getCurrentSquareFromCoords(
     xCoord,
     yCoord,
     globalState.offset
   );
   const square = globalState.squares[row][col];
-  if (square.locked) {
-    return;
+  if (!square.locked) {
+    moveSquareToNextState(square);
   }
-  moveSquareToNextState(square);
-  return globalState;
 }
 
 function getInitialSquares(): Square[][] {
-  return Array(numberOfColumns)
+  const output = Array(numberOfColumns)
     .fill(undefined)
     .map((_, xIdx) => {
       return Array(numberOfRows)
@@ -75,6 +75,7 @@ function getInitialSquares(): Square[][] {
           };
         });
     });
+    return output
 }
 
 function getColorIndex(xIdx: number, yIdx: number): number {
@@ -105,13 +106,15 @@ function moveSquareToNextState(square: Square): void {
   square.locked = isTransitionState(square);
 }
 
-function incrementOverlayWidthOrMoveState(square: Square): void {
+function incrementOverlayWidthOrMoveState(square: Square): Square {
   square.overlayWidth < dimension
     ? square.overlayWidth++
     : moveSquareToNextState(square);
+  return square;
 }
-function decrementOverlayWidthOrMoveState(square: Square): void {
+function decrementOverlayWidthOrMoveState(square: Square): Square {
   square.overlayWidth > 0
     ? square.overlayWidth--
     : moveSquareToNextState(square);
+  return square;
 }
