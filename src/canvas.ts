@@ -1,9 +1,8 @@
 import { State, Square, SquareState } from './types';
 import { canvas } from './constants';
-import { pipe } from './pipe';
 import { width, height, dimension, interval } from './constants';
 import { getOverlayPalette, OverlayColor, getBaseColor } from './colors';
-import { updateOffset, updateOverlayWidthsAndSquareStates } from './state';
+import { getGlobalState, moveSquares } from './state';
 
 const ctx = canvas.getContext('2d');
 
@@ -40,7 +39,11 @@ function paintWholeSquare(square: Square, realXPosition: number, yIdx: number) {
   );
 }
 
-function paintSplitSquare(square: Square, naturalXPosition: number, yIdx: number) {
+function paintSplitSquare(
+  square: Square,
+  naturalXPosition: number,
+  yIdx: number
+) {
   const { colorIndex, overlayWidth, squareState } = square;
   const yCoord = yIdx * dimension;
   const naturalLeftEdgeOfOverlay = dimension / 2 - overlayWidth / 2;
@@ -101,27 +104,17 @@ function paintBaseSquare(
   ctx.fillRect(xCoord, yCoord, width, dimension);
 }
 
-function moveSquares(state: State): State {
-  const { offset } = state;
-  return pipe(state, [
-    () => updateOffset((offset + 1) % width),
-    updateOverlayWidthsAndSquareStates
-  ]);
-}
-
-let count = 0
-
-export function startSquareAnimation(state: State): void {
-
-  function recursivelyAnimateSquares(state: State): void {
-    count++
+export function startSquareAnimation(): void {
+  const state = getGlobalState();
+  function recursivelyAnimateSquares(): void {
     setTimeout(() => {
-      const nextState = pipe(state, [paint, moveSquares])
-      recursivelyAnimateSquares(nextState);
+      paint(state);
+      moveSquares(state);
+      recursivelyAnimateSquares();
     }, interval);
   }
 
-  recursivelyAnimateSquares(state);
+  recursivelyAnimateSquares();
 }
 
 function getOverlayColor(

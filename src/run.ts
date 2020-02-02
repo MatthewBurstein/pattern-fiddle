@@ -1,7 +1,7 @@
-import { getGlobalState, handleMouseMove } from './state';
-import { startSquareAnimation} from './canvas';
+import { handleMouseMove } from './state';
+import { startSquareAnimation } from './canvas';
 
-startSquareAnimation(getGlobalState());
+startSquareAnimation();
 
 window.addEventListener('mousemove', event => {
   const { clientX, clientY } = event;

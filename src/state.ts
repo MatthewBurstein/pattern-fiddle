@@ -21,31 +21,10 @@ export function getGlobalState(): State {
   return globalState;
 }
 
-export function updateOffset(offset: number): State {
-  globalState.offset = offset;
-  return globalState;
-}
-
-export function updateSquares(newSquares: Square[][]) {
-  globalState.squares = newSquares;
-  return globalState;
-}
-
-export function updateOverlayWidthsAndSquareStates(): State {
-    const newSquares = globalState.squares.map((row: Square[]): Square[] =>
-      row.map((square: Square): Square => {
-        if (isTransitionFromState(square)) {
-          const newValue = decrementOverlayWidthOrMoveState(square);
-          return newValue
-        } else if (isTransitionToState(square)) {
-          const newValue = incrementOverlayWidthOrMoveState(square);
-          return newValue
-        } else {
-          return square
-        }
-      })
-    )
-    return updateSquares(newSquares)
+export function moveSquares(state: State): void {
+  const { offset } = state;
+  updateOffset((offset + 1) % width);
+  updateOverlayWidthsAndSquareStates();
 }
 
 export function handleMouseMove(xCoord: number, yCoord: number): void {
@@ -58,6 +37,34 @@ export function handleMouseMove(xCoord: number, yCoord: number): void {
   if (!square.locked) {
     moveSquareToNextState(square);
   }
+}
+
+function updateOffset(offset: number): State {
+  globalState.offset = offset;
+  return globalState;
+}
+
+function updateSquares(newSquares: Square[][]) {
+  globalState.squares = newSquares;
+  return globalState;
+}
+
+function updateOverlayWidthsAndSquareStates(): State {
+  return updateSquares(
+    globalState.squares.map((row: Square[]): Square[] =>
+      row.map(
+        (square: Square): Square => {
+          if (isTransitionFromState(square)) {
+            return decrementOverlayWidthOrMoveState(square);
+          } else if (isTransitionToState(square)) {
+            return incrementOverlayWidthOrMoveState(square);
+          } else {
+            return square;
+          }
+        }
+      )
+    )
+  );
 }
 
 function getInitialSquares(): Square[][] {
@@ -75,7 +82,7 @@ function getInitialSquares(): Square[][] {
           };
         });
     });
-    return output
+  return output;
 }
 
 function getColorIndex(xIdx: number, yIdx: number): number {
