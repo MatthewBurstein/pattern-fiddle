@@ -6,7 +6,8 @@
   "scripts": {
     "sass:watch": "sass --watch styles/styles.scss:build/styles.css ./styles:./build",
     "sass": "sass styles/styles.scss:build/styles.css ./styles:./build",
-    "build": "webpack --watch --mode=development",
+    "start": "webpack --watch --mode=development",
+    "build": "webpack --mode=production",
     "prettier": "prettier --parser typescript --single-quote --write \"src/**/*.{ts,tsx}\""
   },
   "author": "",

@@ -4,8 +4,12 @@ making pretty patterns
 
 ## Usage
 
-Build sass
 ```
-$ npm run build
+$ npm start
 $ open index.html
 ```
+
+## Deployment
+
+To deploy, run `$ npm run build` to create the production bundle, and push it to the master branch.
+The site can be found on [github pages](https://matthewburstein.github.io/pattern-fiddle/).
